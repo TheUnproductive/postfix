@@ -5,8 +5,8 @@
     	{"include": "#keywords"},
 		{"include": "#keyword!"},
     	{"include": "#strings"},
+		{"include": "#multilinecomment"},
     	{"include": "#comments"},
-    	{"include": "#commentblock"},
     	{"include": "#floats"},
     	{"include": "#integers"},
     	{"include": "#builtin-functions"}
@@ -64,23 +64,23 @@
 				}
 			]
 		},
-		"commentblock": {
-			"name": "comment.block.postfix",
-			"begin": "#<",
-			"end": ">#",
-			"patterns": [
-				{
-					"name": "",
-					"match": "\\\\."
-				}
-			]
-		},
 		"builtin-functions": {
 			"patterns": [
 			  	{
 					"name": "support.function.builtin.postfix",
 					"match": "(?x)\n  (?<!\\.) \\b(\n abs | acos | append | arr | arr\\? | array | asin | atan | atan2 | bool\\? | ceil | chr->str | chars->str | clear | contains | copy | cos | debugger | div | dup | empty\\?    | enumerate | eval | exec | exit | filter | format | getattr\n    | globals | hasattr | hash | help | hex | id | input\n    | isinstance | issubclass | iter | len | license | locals | map\n    | max | memoryview | min | next | oct | open | ord | pow | print | println\n    | quit | range | reload | repr | reversed | round\n    | setattr | sorted | sum | vars | zip\n  )\\b\n"
 			  	}
+			]
+		},
+		"multilinecomment": {
+			"name": "punctuation.definition.comment.postfix",
+			"begin": "#\\<",
+			"end": "\\>#",
+			"patterns": [
+				{
+					"name": "",
+					"match": "\\\\."
+				}
 			]
 		}
 	},
