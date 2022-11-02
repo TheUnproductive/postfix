@@ -2,22 +2,32 @@
 	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
 	"name": "Postfix",
 	"patterns": [
-		{
-			"include": "#keywords"
-		},
-		{
-			"include": "#strings"
-		},
-		{
-			"include": "#comments"
-		}
+    	{"include": "#keywords"},
+		{"include": "#keyword!"},
+    	{"include": "#strings"},
+    	{"include": "#comments"},
+    	{"include": "#commentblock"},
+    	{"include": "#floats"},
+    	{"include": "#integers"},
+    	{"include": "#builtin-functions"}
 	],
 	"repository": {
 		"keywords": {
-			"patterns": [{
-				"name": "keyword.control.postfix",
-				"match": "\\b(if|loop|for|cond|cond-fun|breakif|fun|lam|!)\\b"
-			}]
+			"match": "(?x)\n\\b(?<!\\.)\n(?:\n(and | or | not)(?# 1)\n|\n(!|if|loop|for|cond|cond-fun|breakif|fun|lam|break|datadef)(?# 2)\n)| (\\*\\* | \\* | \\+ | - | % | // | / | @)(?# 3)\n\n|(!= | == | >= | <= | < | >)(?# 4)\n",
+      		"captures": {
+        		"1": { "name": "keyword.operator.logical.postfix" },
+        		"2": { "name": "keyword.control.flow.postfix" },
+        		"3": { "name": "keyword.operator.arithmetic.postfix" },
+        		"4": { "name": "keyword.operator.comparison.postfix" }
+      		}
+		},
+		"keyword!": {
+			"patterns": [
+				{
+					"name": "keyword.control.postfix",
+					"match": "!"
+				}
+			]
 		},
 		"strings": {
 			"name": "string.quoted.double.postfix",
@@ -30,11 +40,24 @@
 				}
 			]
 		},
+		"integers": {
+			"name": "constant.numeric.dec.postfix",
+			"match": "(?x)\n  (?<![\\w\\.])(?:\n      [1-9](?: _?[0-9] )*\n      |\n      0+\n      |\n      [0-9](?: _?[0-9] )* ([jJ])\n      |\n      0 ([0-9]+)(?![eE\\.])\n  )\\b\n",
+      		"captures": {
+        		"1": { "name": "storage.type.imaginary.number.postfix" },
+        		"2": { "name": "invalid.illegal.dec.postfix" }
+      		}
+		},
+		"floats": {
+			"name": "constant.numeric.float.postfix",
+			"match": "(?x)\n  (?<! \\w)(?:\n    (?:\n      \\.[0-9](?: _?[0-9] )*\n      |\n      [0-9](?: _?[0-9] )* \\. [0-9](?: _?[0-9] )*\n      |\n      [0-9](?: _?[0-9] )* \\.\n    ) (?: [eE][+-]?[0-9](?: _?[0-9] )* )?\n    |\n    [0-9](?: _?[0-9] )* (?: [eE][+-]?[0-9](?: _?[0-9] )* )\n  )([jJ])?\\b\n",
+      		"captures": { "1": { "name": "storage.type.imaginary.number.postfix" } }
+		},
 		"comments": {
 			"name": "punctuation.definition.comment.postfix",
 			"begin": "#",
 			"end": "\n",
-			"patters": [
+			"patterns": [
 				{
 					"name": "",
 					"match": "\\\\."
@@ -45,11 +68,19 @@
 			"name": "comment.block.postfix",
 			"begin": "#<",
 			"end": ">#",
-			"patters": [
+			"patterns": [
 				{
 					"name": "",
 					"match": "\\\\."
 				}
+			]
+		},
+		"builtin-functions": {
+			"patterns": [
+			  	{
+					"name": "support.function.builtin.postfix",
+					"match": "(?x)\n  (?<!\\.) \\b(\n abs | acos | append | arr | arr\\? | array | asin | atan | atan2 | bool\\? | ceil | chr->str | chars->str | clear | contains | copy | cos | debugger | div | dup | empty\\?    | enumerate | eval | exec | exit | filter | format | getattr\n    | globals | hasattr | hash | help | hex | id | input\n    | isinstance | issubclass | iter | len | license | locals | map\n    | max | memoryview | min | next | oct | open | ord | pow | print | println\n    | quit | range | reload | repr | reversed | round\n    | setattr | sorted | sum | vars | zip\n  )\\b\n"
+			  	}
 			]
 		}
 	},
