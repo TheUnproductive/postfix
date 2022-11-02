@@ -1,0 +1,25 @@
+{
+  "name": "pf",
+  "displayName": "PostFix",
+  "description": "LUH PostFix Language Support for VSCode",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.54.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "postfix",
+      "aliases": ["Postfix", "postfix"],
+      "extensions": [".pf"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "postfix",
+      "scopeName": "source.pf",
+      "path": "./syntaxes/postfix.tmLanguage.json"
+    }]
+  }
+}
