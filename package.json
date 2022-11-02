@@ -3,6 +3,7 @@
   "displayName": "PostFix",
   "description": "LUH PostFix Language Support for VSCode",
   "version": "0.0.1",
+  "publisher": "JustusSchneider",
   "engines": {
     "vscode": "^1.54.0"
   },
@@ -21,5 +22,8 @@
       "scopeName": "source.pf",
       "path": "./syntaxes/postfix.tmLanguage.json"
     }]
+  },
+  "repository":{
+    "type":"git","url":"https://github.com/TheUnproductive/postfix.git"
   }
 }
