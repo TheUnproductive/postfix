@@ -7,14 +7,14 @@
     	{"include": "#strings"},
 		{"include": "#multilinecomment"},
     	{"include": "#comments"},
-    	{"include": "#floats"},
-    	{"include": "#integers"},
-    	{"include": "#builtin-functions"},
-		{"include": "#builtin-functions-?"},
 		{"include": "#defines"},
 		{"include": "#function-call"},
 		{"include": "#function-name"},
-		{"include": "#function-arguments"}
+		{"include": "#function-arguments"},
+    	{"include": "#floats"},
+    	{"include": "#integers"},
+    	{"include": "#builtin-functions"},
+		{"include": "#builtin-functions-?"}
 	],
 	"repository": {
 		"keywords": {
@@ -73,7 +73,7 @@
 			"patterns": [
 			  	{
 					"name": "support.function.builtin.postfix",
-					"match": "(?x)\n  (?<!\\.) \\b(\n abs | acos | append | arr | array | asin | atan | atan2 | bool | ceil | chr->str | chars->str | clear | contains | copy | cos | debugger | div | dup | empty    | enumerate | eval | exec | exit | filter | format | getattr\n    | globals | hasattr | hash | help | hex | id | input\n    | isinstance | issubclass | iter | len | license | locals | map\n    | max | memoryview | min | next | oct | open | ord | pow | print | println\n    | quit | range | reload | repr | reversed | round\n    | setattr | sorted | sum | vars | zip\n  )\\b\n"
+					"match": "(?x)\n  (?<!\\.) \\b(\n abs | acos | append | arr | array | asin | atan | atan2 | bool | ceil | chr->str | chars->str | clear | contains | copy | cos | debugger | div | dup | empty    | enumerate | eval | exec | exit | filter | format | getattr\n    | globals | hasattr | hash | help | hex | id | input\n    | isinstance | issubclass | iter | len | license | locals | map\n    | max | memoryview | min | next | oct | open | ord | pow | print | println\n    | quit | range | reload | repr | reversed | round\n    | setattr | sorted | sum | vars | zip\n  )|(:[a-zA-Z]+)\\b\n"
 			  	}
 			]
 		},
@@ -100,7 +100,7 @@
 			"patterns": [
 				{
 					"name": "entity.name.function.postfix",
-					"match": "([a-zA-Z]+:)|(:[a-zA-Z]+)"
+					"match": "(.*:)"
 				}
 			]
 		},
