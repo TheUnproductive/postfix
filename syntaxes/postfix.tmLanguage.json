@@ -9,7 +9,12 @@
     	{"include": "#comments"},
     	{"include": "#floats"},
     	{"include": "#integers"},
-    	{"include": "#builtin-functions"}
+    	{"include": "#builtin-functions"},
+		{"include": "#builtin-functions-?"},
+		{"include": "#defines"},
+		{"include": "#function-call"},
+		{"include": "#function-name"},
+		{"include": "#function-arguments"}
 	],
 	"repository": {
 		"keywords": {
@@ -68,9 +73,17 @@
 			"patterns": [
 			  	{
 					"name": "support.function.builtin.postfix",
-					"match": "(?x)\n  (?<!\\.) \\b(\n abs | acos | append | arr | arr\\? | array | asin | atan | atan2 | bool\\? | ceil | chr->str | chars->str | clear | contains | copy | cos | debugger | div | dup | empty\\?    | enumerate | eval | exec | exit | filter | format | getattr\n    | globals | hasattr | hash | help | hex | id | input\n    | isinstance | issubclass | iter | len | license | locals | map\n    | max | memoryview | min | next | oct | open | ord | pow | print | println\n    | quit | range | reload | repr | reversed | round\n    | setattr | sorted | sum | vars | zip\n  )\\b\n"
+					"match": "(?x)\n  (?<!\\.) \\b(\n abs | acos | append | arr | array | asin | atan | atan2 | bool | ceil | chr->str | chars->str | clear | contains | copy | cos | debugger | div | dup | empty    | enumerate | eval | exec | exit | filter | format | getattr\n    | globals | hasattr | hash | help | hex | id | input\n    | isinstance | issubclass | iter | len | license | locals | map\n    | max | memoryview | min | next | oct | open | ord | pow | print | println\n    | quit | range | reload | repr | reversed | round\n    | setattr | sorted | sum | vars | zip\n  )\\b\n"
 			  	}
 			]
+		},
+		"builtin-functions-?": {
+			"patterns": [
+				{
+					"name": "support.function.postfix",
+					"match": "\\?"
+				}
+			]	
 		},
 		"multilinecomment": {
 			"name": "punctuation.definition.comment.postfix",
@@ -82,7 +95,71 @@
 					"match": "\\\\."
 				}
 			]
-		}
+		},
+		"defines": {
+			"patterns": [
+				{
+					"name": "entity.name.function.postfix",
+					"match": "([a-zA-Z]+:)|(:[a-zA-Z]+)"
+				}
+			]
+		},
+		"function-call": {
+			"name": "meta.function-call.python",
+			"comment": "Regular function call of the type \"name(args)\"",
+			"begin": "(?x)\n  \\b(?=\n    ([[:alpha:]_]\\w*) \\s* (\\()\n  )\n",
+			"end": "(\\))",
+			"endCaptures": {
+			  "1": { "name": "punctuation.definition.arguments.end.python" }
+			},
+			"patterns": [
+			  { "include": "#function-name" },
+			  { "include": "#function-arguments" }
+			]
+		  },
+		  "function-name": {
+			"patterns": [
+			  {
+				"comment": "Some color schemas support meta.function-call.generic scope",
+				"name": "meta.function-call.generic.python",
+				"match": "(?x)\n  \\b ([[:alpha:]_]\\w*) \\b\n"
+			  }
+			]
+		  },
+		  "function-arguments": {
+			"begin": "(\\()",
+			"end": "(?=\\))(?!\\)\\s*\\()",
+			"beginCaptures": {
+			  "1": { "name": "punctuation.definition.arguments.begin.python" }
+			},
+			"contentName": "meta.function-call.arguments.python",
+			"patterns": [
+			  { "name": "punctuation.separator.arguments.python", "match": "(,)" },
+			  {
+				"match": "(?x)\n  (?:(?<=[,(])|^) \\s* (\\*{1,2})\n",
+				"captures": {
+				  "1": { "name": "keyword.operator.unpacking.arguments.python" }
+				}
+			  },
+			  {
+				"match": "\\b([[:alpha:]_]\\w*)\\s*(=)(?!=)",
+				"captures": {
+				  "1": { "name": "variable.parameter.function-call.python" },
+				  "2": { "name": "keyword.operator.assignment.python" }
+				}
+			  },
+			  { "name": "keyword.operator.assignment.python", "match": "=(?!=)" },
+			  { "include": "#expression" },
+			  {
+				"match": "\\s*(\\))\\s*(\\()",
+				"captures": {
+				  "1": { "name": "punctuation.definition.arguments.end.python" },
+				  "2": { "name": "punctuation.definition.arguments.begin.python" }
+				}
+			  }
+			]
+		  }
+
 	},
 	"scopeName": "source.pf"
 }
