@@ -6,11 +6,10 @@
 		{"include": "#keyword!"},
     	{"include": "#strings"},
 		{"include": "#multilinecomment"},
-    	{"include": "#comments"},
-		{"include": "#defines"},
-		{"include": "#function-call"},
 		{"include": "#function-name"},
-		{"include": "#function-arguments"},
+		{"include": "#meta-function"},
+		{"include": "#meta-function-parameters"},
+    	{"include": "#comments"},
     	{"include": "#floats"},
     	{"include": "#integers"},
     	{"include": "#builtin-functions"},
@@ -47,7 +46,7 @@
 		},
 		"integers": {
 			"name": "constant.numeric.dec.postfix",
-			"match": "(?x)\n  (?<![\\w\\.])(?:\n      [1-9](?: _?[0-9] )*\n      |\n      0+\n      |\n      [0-9](?: _?[0-9] )* ([jJ])\n      |\n      0 ([0-9]+)(?![eE\\.])\n  )\\b\n",
+			"match": "(\\s?-?)(?x)\n  (?<![\\w\\.])(?:\n      [1-9](?: _?[0-9] )*\n      |\n      0+\n      |\n      [0-9](?: _?[0-9] )* ([jJ])\n      |\n      0 ([0-9]+)(?![eE\\.])\n  )\\b\n\\s",
       		"captures": {
         		"1": { "name": "storage.type.imaginary.number.postfix" },
         		"2": { "name": "invalid.illegal.dec.postfix" }
@@ -55,7 +54,7 @@
 		},
 		"floats": {
 			"name": "constant.numeric.float.postfix",
-			"match": "(?x)\n  (?<! \\w)(?:\n    (?:\n      \\.[0-9](?: _?[0-9] )*\n      |\n      [0-9](?: _?[0-9] )* \\. [0-9](?: _?[0-9] )*\n      |\n      [0-9](?: _?[0-9] )* \\.\n    ) (?: [eE][+-]?[0-9](?: _?[0-9] )* )?\n    |\n    [0-9](?: _?[0-9] )* (?: [eE][+-]?[0-9](?: _?[0-9] )* )\n  )([jJ])?\\b\n",
+			"match": "(\\s?-?)(?x)\n  (?<! \\w)(?:\n    (?:\n      \\.[0-9](?: _?[0-9] )*\n      |\n      [0-9](?: _?[0-9] )* \\. [0-9](?: _?[0-9] )*\n      |\n      [0-9](?: _?[0-9] )* \\.\n    ) (?: [eE][+-]?[0-9](?: _?[0-9] )* )?\n    |\n    [0-9](?: _?[0-9] )* (?: [eE][+-]?[0-9](?: _?[0-9] )* )\n  )([jJ])?\\b\n\\s",
       		"captures": { "1": { "name": "storage.type.imaginary.number.postfix" } }
 		},
 		"comments": {
@@ -73,7 +72,7 @@
 			"patterns": [
 			  	{
 					"name": "support.function.builtin.postfix",
-					"match": "(?x)\n  (?<!\\.) \\b(\n abs | acos | append | arr | array | asin | atan | atan2 | bool | ceil | chr->str | chars->str | clear | contains | copy | cos | debugger | div | dup | empty    | enumerate | eval | exec | exit | filter | format | getattr\n    | globals | hasattr | hash | help | hex | id | input\n    | isinstance | issubclass | iter | len | license | locals | map\n    | max | memoryview | min | next | oct | open | ord | pow | print | println\n    | quit | range | reload | repr | reversed | round\n    | setattr | sorted | sum | vars | zip\n  )|(:[a-zA-Z]+)\\b\n"
+					"match": "(?x)\n  (?<!\\.) \\b(\n abs | acos | append | arr | array | asin | atan | atan2 | bool | ceil | chr->str | chars->str | clear | contains | copy | cos | debugger | div | dup | empty    | enumerate | eval | exec | exit | filter | format | getattr\n    | globals | hasattr | hash | help | hex | id | input\n    | isinstance | issubclass | iter | len | license | locals | map\n    | max | memoryview | min | next | oct | open | ord | pow | print(ln)? | quit | range | reload | repr | reversed | round | setattr | sorted | sum | vars | zip)|(:[a-zA-Z]+)\\b\n"
 			  	}
 			]
 		},
@@ -91,74 +90,25 @@
 			"end": "\\>#",
 			"patterns": [
 				{
-					"name": "",
-					"match": "\\\\."
+					"name": "punctuation.definition.comment.postfix",
+					"match": "^#\\<[\\w\\s]+\\>#$"
 				}
 			]
 		},
-		"defines": {
-			"patterns": [
-				{
-					"name": "entity.name.function.postfix",
-					"match": "(.*:)"
-				}
-			]
+		"function-name": {
+			"name": "entity.name.function.postfix",
+			"match": "^([a-zA-Z0-9\\-\\+]+):(\\ )*(\\({1}[a-zA-Z\\:\\ ]+((\\-\\>)[a-zA-Z\\:\\ ]+)?\\){1})?(\\ )*\\{$"
 		},
-		"function-call": {
-			"name": "meta.function-call.python",
-			"comment": "Regular function call of the type \"name(args)\"",
-			"begin": "(?x)\n  \\b(?=\n    ([[:alpha:]_]\\w*) \\s* (\\()\n  )\n",
-			"end": "(\\))",
-			"endCaptures": {
-			  "1": { "name": "punctuation.definition.arguments.end.python" }
-			},
-			"patterns": [
-			  { "include": "#function-name" },
-			  { "include": "#function-arguments" }
-			]
-		  },
-		  "function-name": {
-			"patterns": [
-			  {
-				"comment": "Some color schemas support meta.function-call.generic scope",
-				"name": "meta.function-call.generic.python",
-				"match": "(?x)\n  \\b ([[:alpha:]_]\\w*) \\b\n"
-			  }
-			]
-		  },
-		  "function-arguments": {
-			"begin": "(\\()",
-			"end": "(?=\\))(?!\\)\\s*\\()",
-			"beginCaptures": {
-			  "1": { "name": "punctuation.definition.arguments.begin.python" }
-			},
-			"contentName": "meta.function-call.arguments.python",
-			"patterns": [
-			  { "name": "punctuation.separator.arguments.python", "match": "(,)" },
-			  {
-				"match": "(?x)\n  (?:(?<=[,(])|^) \\s* (\\*{1,2})\n",
-				"captures": {
-				  "1": { "name": "keyword.operator.unpacking.arguments.python" }
-				}
-			  },
-			  {
-				"match": "\\b([[:alpha:]_]\\w*)\\s*(=)(?!=)",
-				"captures": {
-				  "1": { "name": "variable.parameter.function-call.python" },
-				  "2": { "name": "keyword.operator.assignment.python" }
-				}
-			  },
-			  { "name": "keyword.operator.assignment.python", "match": "=(?!=)" },
-			  { "include": "#expression" },
-			  {
-				"match": "\\s*(\\))\\s*(\\()",
-				"captures": {
-				  "1": { "name": "punctuation.definition.arguments.end.python" },
-				  "2": { "name": "punctuation.definition.arguments.begin.python" }
-				}
-			  }
-			]
-		  }
+		"meta-function": {
+			"name": "meta.function.postfix",
+			"begin": "^([a-zA-Z0-9\\-\\+])+:(\\ )*(\\({1}[a-zA-Z\\:\\ ]+((\\-\\>)[a-zA-Z\\:\\ ]+)?\\){1})?(\\ )*\\{$",
+			"end": "^\\}$"
+		},
+		"meta-function-parameters": {
+			"name": "meta.function.parameters.postfix",
+			"begin": "\\(",
+			"end": "\\)"
+		}
 
 	},
 	"scopeName": "source.pf"
