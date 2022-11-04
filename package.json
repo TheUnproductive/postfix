@@ -2,7 +2,7 @@
   "name": "pf",
   "displayName": "PostFix",
   "description": "LUH PostFix Language Support for VSCode",
-  "version": "0.2.7",
+  "version": "0.2.7.1",
   "publisher": "JustusSchneider",
   "engines": {
     "vscode": "^1.54.0"
